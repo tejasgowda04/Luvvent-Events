@@ -1,0 +1,1851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Luvvent Events – Where Every Moment Blooms</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&family=Great+Vibes&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<style>
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8C97A;
+    --gold-pale: #F5E6C0;
+    --deep: #1A0E2E;
+    --deep2: #2D1B4E;
+    --blush: #F2D4D7;
+    --cream: #FDF8F2;
+    --text: #2A1A3E;
+    --muted: #7A6A8A;
+    --white: #FFFFFF;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; font-size: 16px; }
+
+  body {
+    font-family: 'Montserrat', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* ── PRELOADER ── */
+  #preloader {
+    position: fixed; inset: 0;
+    background: var(--deep);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    z-index: 9999;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+  }
+  #preloader.hidden { opacity: 0; visibility: hidden; }
+
+  .preloader-script {
+    font-family: 'Great Vibes', cursive;
+    font-size: 3.5rem;
+    color: var(--gold);
+    opacity: 0;
+    transform: scale(0.6) translateY(20px);
+    animation: nameReveal 1.2s cubic-bezier(0.16,1,0.3,1) 0.3s forwards;
+    text-shadow: 0 0 40px rgba(201,168,76,0.6);
+  }
+  .preloader-sub {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.35em;
+    color: var(--gold-light);
+    text-transform: uppercase;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 1.3s forwards;
+    margin-top: 0.5rem;
+  }
+  .preloader-line {
+    width: 0; height: 1px;
+    background: var(--gold);
+    margin-top: 1.5rem;
+    animation: lineGrow 1s ease 1.8s forwards;
+  }
+
+  @keyframes nameReveal {
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+  @keyframes fadeUp {
+    to { opacity: 1; }
+  }
+  @keyframes lineGrow {
+    to { width: 120px; }
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 1000;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1rem 1.5rem;
+    background: transparent;
+    transition: background 0.4s, backdrop-filter 0.4s, padding 0.4s;
+  }
+  nav.scrolled {
+    background: rgba(26,14,46,0.92);
+    backdrop-filter: blur(20px);
+    padding: 0.7rem 1.5rem;
+    box-shadow: 0 2px 30px rgba(0,0,0,0.3);
+  }
+  .nav-logo {
+    font-family: 'Great Vibes', cursive;
+    font-size: 1.8rem;
+    color: var(--gold);
+    text-decoration: none;
+    text-shadow: 0 0 20px rgba(201,168,76,0.4);
+  }
+  .nav-cta {
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    color: var(--deep);
+    border: none; border-radius: 50px;
+    padding: 0.5rem 1.2rem;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-decoration: none;
+    display: flex; align-items: center; gap: 0.4rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .nav-cta:hover { transform: scale(1.05); box-shadow: 0 4px 20px rgba(201,168,76,0.5); }
+  .nav-links { display: none; }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100dvh;
+    position: relative;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    overflow: hidden;
+    text-align: center;
+    padding: 6rem 1.5rem 4rem;
+  }
+
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 30%, rgba(201,168,76,0.18) 0%, transparent 70%),
+      linear-gradient(160deg, #1A0E2E 0%, #2D1B4E 50%, #1A0A2A 100%);
+  }
+
+  .floating-petals {
+    position: absolute; inset: 0; pointer-events: none;
+    overflow: hidden;
+  }
+  .petal {
+    position: absolute;
+    width: 8px; height: 14px;
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    opacity: 0;
+    animation: petalFall linear infinite;
+  }
+
+  @keyframes petalFall {
+    0% { transform: translateY(-20px) rotate(0deg); opacity: 0; }
+    10% { opacity: 0.6; }
+    90% { opacity: 0.3; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+  }
+
+  .hero-eyebrow {
+    font-size: 0.65rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    position: relative;
+    opacity: 0;
+    animation: fadeUp2 0.8s ease 2.6s forwards;
+    display: flex; align-items: center; gap: 0.8rem;
+  }
+  .hero-eyebrow::before, .hero-eyebrow::after {
+    content: '';
+    width: 30px; height: 1px;
+    background: var(--gold);
+    opacity: 0.6;
+  }
+
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.8rem, 10vw, 5rem);
+    font-weight: 300;
+    color: var(--white);
+    line-height: 1.1;
+    margin: 0.8rem 0;
+    position: relative;
+    opacity: 0;
+    animation: heroTitleIn 1s cubic-bezier(0.16,1,0.3,1) 2.8s forwards;
+  }
+  .hero-title span {
+    font-family: 'Great Vibes', cursive;
+    font-size: 1.4em;
+    color: var(--gold);
+    display: block;
+    text-shadow: 0 0 40px rgba(201,168,76,0.5);
+  }
+
+  @keyframes heroTitleIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeUp2 {
+    to { opacity: 1; }
+  }
+
+  .hero-sub {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.65);
+    letter-spacing: 0.05em;
+    max-width: 300px;
+    line-height: 1.8;
+    position: relative;
+    opacity: 0;
+    animation: fadeUp2 0.8s ease 3.1s forwards;
+  }
+
+  .hero-btns {
+    display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;
+    margin-top: 2rem;
+    opacity: 0;
+    animation: fadeUp2 0.8s ease 3.3s forwards;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+    color: var(--deep);
+    border: none; border-radius: 50px;
+    padding: 0.85rem 2rem;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.78rem; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    cursor: pointer; text-decoration: none;
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    transition: transform 0.25s, box-shadow 0.25s;
+    box-shadow: 0 4px 30px rgba(201,168,76,0.45);
+  }
+  .btn-primary:hover { transform: translateY(-3px) scale(1.03); box-shadow: 0 8px 40px rgba(201,168,76,0.55); }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--gold-light);
+    border: 1px solid rgba(201,168,76,0.5);
+    border-radius: 50px;
+    padding: 0.85rem 2rem;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.78rem; font-weight: 500;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    cursor: pointer; text-decoration: none;
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    transition: all 0.25s;
+  }
+  .btn-outline:hover { background: rgba(201,168,76,0.1); border-color: var(--gold); }
+
+  .hero-stats {
+    display: flex; gap: 2rem;
+    margin-top: 3rem;
+    opacity: 0;
+    animation: fadeUp2 0.8s ease 3.5s forwards;
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem; font-weight: 600;
+    color: var(--gold);
+  }
+  .stat-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin-top: 0.1rem;
+  }
+
+  .scroll-indicator {
+    position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
+    opacity: 0;
+    animation: fadeUp2 1s ease 4s forwards;
+  }
+  .scroll-dot {
+    width: 5px; height: 5px; border-radius: 50%;
+    background: var(--gold);
+    animation: scrollBounce 1.5s ease infinite;
+  }
+  .scroll-dot:nth-child(2) { animation-delay: 0.2s; opacity: 0.6; }
+  .scroll-dot:nth-child(3) { animation-delay: 0.4s; opacity: 0.3; }
+  @keyframes scrollBounce {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(6px); }
+  }
+
+  /* ── SECTION BASE ── */
+  section { padding: 5rem 1.5rem; }
+
+  .section-eyebrow {
+    font-size: 0.62rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold);
+    display: flex; align-items: center; gap: 0.6rem;
+    margin-bottom: 0.8rem;
+  }
+  .section-eyebrow::before {
+    content: '';
+    width: 24px; height: 1px;
+    background: var(--gold);
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 7vw, 2.8rem);
+    font-weight: 300;
+    color: var(--text);
+    line-height: 1.2;
+    margin-bottom: 1rem;
+  }
+  .section-title em {
+    font-style: italic;
+    color: var(--deep2);
+  }
+
+  .section-desc {
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.9;
+    max-width: 480px;
+  }
+
+  /* ── REVEAL ANIMATIONS ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-left {
+    opacity: 0;
+    transform: translateX(-40px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal-left.visible { opacity: 1; transform: translateX(0); }
+  .reveal-scale {
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal-scale.visible { opacity: 1; transform: scale(1); }
+
+  .delay-1 { transition-delay: 0.1s; }
+  .delay-2 { transition-delay: 0.2s; }
+  .delay-3 { transition-delay: 0.3s; }
+  .delay-4 { transition-delay: 0.4s; }
+  .delay-5 { transition-delay: 0.5s; }
+  .delay-6 { transition-delay: 0.6s; }
+
+  /* ── ABOUT ── */
+  #about {
+    background: var(--deep);
+    color: var(--white);
+    overflow: hidden;
+    position: relative;
+  }
+  #about::before {
+    content: '';
+    position: absolute; top: -80px; right: -80px;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,168,76,0.15), transparent 70%);
+  }
+  .about-grid {
+    display: grid;
+    gap: 2.5rem;
+  }
+  .about-img-wrap {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    aspect-ratio: 4/3;
+  }
+  .about-img-placeholder {
+    width: 100%; height: 100%;
+    background: linear-gradient(135deg, var(--deep2), #3D2B5E);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Great Vibes', cursive;
+    font-size: 2.5rem;
+    color: var(--gold);
+  }
+  .about-img-wrap::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 20px;
+    pointer-events: none;
+  }
+  .about-badge {
+    position: absolute; bottom: -1rem; right: -1rem;
+    width: 80px; height: 80px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    border-radius: 50%;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    color: var(--deep);
+    font-weight: 700;
+    box-shadow: 0 8px 30px rgba(201,168,76,0.5);
+  }
+  .about-badge span:first-child { font-size: 1.4rem; line-height: 1; }
+  .about-badge span:last-child { font-size: 0.45rem; letter-spacing: 0.05em; text-transform: uppercase; text-align: center; }
+
+  .about-text .section-title { color: var(--white); }
+  .about-text .section-desc { color: rgba(255,255,255,0.6); }
+
+  .about-features {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 0.8rem; margin-top: 1.5rem;
+  }
+  .about-feat {
+    background: rgba(201,168,76,0.08);
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 12px;
+    padding: 0.8rem;
+    display: flex; align-items: center; gap: 0.6rem;
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.8);
+    transition: background 0.3s, transform 0.3s;
+  }
+  .about-feat:hover { background: rgba(201,168,76,0.15); transform: translateY(-2px); }
+  .about-feat i { color: var(--gold); font-size: 1rem; }
+
+  /* ── SERVICES ── */
+  #services { background: var(--cream); }
+  .services-grid {
+    display: grid; gap: 1.2rem; margin-top: 2.5rem;
+  }
+  .service-card {
+    background: var(--white);
+    border-radius: 20px;
+    padding: 1.8rem 1.5rem;
+    border: 1px solid rgba(201,168,76,0.12);
+    position: relative; overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.35s cubic-bezier(0.16,1,0.3,1), box-shadow 0.35s, border-color 0.3s;
+  }
+  .service-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light));
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.4s ease;
+  }
+  .service-card:hover::before { transform: scaleX(1); }
+  .service-card:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(201,168,76,0.15); border-color: rgba(201,168,76,0.3); }
+
+  .service-icon {
+    width: 52px; height: 52px;
+    background: linear-gradient(135deg, rgba(201,168,76,0.1), rgba(201,168,76,0.05));
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem; color: var(--gold);
+    margin-bottom: 1rem;
+    transition: background 0.3s, transform 0.3s;
+  }
+  .service-card:hover .service-icon { background: linear-gradient(135deg, var(--gold), var(--gold-light)); color: var(--deep); transform: rotate(-5deg) scale(1.1); }
+
+  .service-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem; font-weight: 600;
+    color: var(--text);
+    margin-bottom: 0.4rem;
+  }
+  .service-desc {
+    font-size: 0.75rem; color: var(--muted); line-height: 1.7;
+  }
+  .service-arrow {
+    position: absolute; bottom: 1.2rem; right: 1.5rem;
+    width: 32px; height: 32px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--deep); font-size: 0.75rem;
+    opacity: 0; transform: translateX(-10px);
+    transition: opacity 0.3s, transform 0.3s;
+  }
+  .service-card:hover .service-arrow { opacity: 1; transform: translateX(0); }
+
+  /* ── GALLERY COVERFLOW ── */
+  #gallery {
+    background: #100820;
+    overflow: hidden;
+    padding: 5rem 0 4rem;
+  }
+  #gallery .section-eyebrow { color: var(--gold-light); padding: 0 1.5rem; }
+  #gallery .section-title { color: var(--white); padding: 0 1.5rem; }
+  #gallery .section-desc { color: rgba(255,255,255,0.45); padding: 0 1.5rem; }
+
+  .cf-stage {
+    perspective: 1100px;
+    perspective-origin: 50% 45%;
+    height: 340px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2.5rem;
+    cursor: grab;
+    user-select: none;
+  }
+  .cf-stage:active { cursor: grabbing; }
+  .cf-track {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+  }
+  .cf-card {
+    position: absolute;
+    width: 210px; height: 280px;
+    border-radius: 18px;
+    top: 50%; left: 50%;
+    margin-top: -140px; margin-left: -105px;
+    overflow: hidden;
+    border: 1px solid rgba(201,168,76,0.15);
+    transition: transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94),
+                box-shadow 0.6s ease, opacity 0.55s ease, border-color 0.4s;
+    will-change: transform;
+  }
+  .cf-card.active { border-color: rgba(201,168,76,0.6); }
+  .cf-card-img {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+  .cf-card.active .cf-card-img { transform: scale(1.05); }
+  .cf-card-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(10,4,20,0.92) 0%, rgba(10,4,20,0.25) 55%, transparent 100%);
+  }
+  .cf-card-shine {
+    position: absolute; inset: 0; border-radius: 18px; pointer-events: none;
+    background: linear-gradient(135deg, rgba(255,255,255,0.09) 0%, transparent 55%);
+    opacity: 0; transition: opacity 0.4s;
+  }
+  .cf-card.active .cf-card-shine { opacity: 1; }
+  .cf-card-badge {
+    position: absolute; top: 0.9rem; right: 0.9rem;
+    background: rgba(201,168,76,0.22);
+    border: 1px solid rgba(201,168,76,0.45);
+    border-radius: 20px; padding: 3px 9px;
+    font-size: 9px; color: #E8C97A;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    font-family: 'Montserrat', sans-serif;
+  }
+  .cf-card-body {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 1.2rem 1rem 1rem;
+  }
+  .cf-card-tag {
+    font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 0.3rem;
+    font-family: 'Montserrat', sans-serif; font-weight: 500;
+  }
+  .cf-card-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px; font-weight: 600; color: #fff; line-height: 1.3;
+  }
+
+  .cf-meta {
+    text-align: center; margin-top: 1.8rem;
+    min-height: 80px; padding: 0 1.5rem;
+    transition: opacity 0.35s ease;
+  }
+  .cf-meta-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem; font-weight: 600; font-style: italic; color: var(--white);
+  }
+  .cf-meta-tag {
+    font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--gold); margin-top: 5px;
+    font-family: 'Montserrat', sans-serif;
+  }
+  .cf-meta-divider {
+    width: 36px; height: 1px;
+    background: rgba(201,168,76,0.4);
+    margin: 0.6rem auto;
+  }
+  .cf-meta-desc {
+    font-size: 0.75rem; color: rgba(255,255,255,0.42);
+    max-width: 280px; margin: 0 auto; line-height: 1.7;
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  .cf-nav {
+    display: flex; align-items: center; justify-content: center;
+    gap: 1rem; margin-top: 1.8rem; padding: 0 1.5rem;
+  }
+  .cf-btn {
+    width: 42px; height: 42px; border-radius: 50%;
+    border: 1px solid rgba(201,168,76,0.4);
+    background: rgba(201,168,76,0.07); color: var(--gold);
+    cursor: pointer; font-size: 1rem;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s, transform 0.15s, border-color 0.2s;
+  }
+  .cf-btn:hover { background: rgba(201,168,76,0.2); border-color: var(--gold); transform: scale(1.1); }
+  .cf-btn:active { transform: scale(0.93); }
+  .cf-dots { display: flex; gap: 6px; align-items: center; }
+  .cf-dot {
+    height: 5px; border-radius: 3px;
+    background: rgba(201,168,76,0.25);
+    transition: width 0.4s cubic-bezier(0.25,0.46,0.45,0.94), background 0.4s;
+    cursor: pointer; width: 5px;
+  }
+  .cf-dot.active { width: 22px; background: var(--gold); }
+  .cf-hint {
+    text-align: center; font-size: 0.6rem;
+    color: rgba(255,255,255,0.18); margin-top: 1rem;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  /* ── PROCESS ── */
+  #process { background: var(--cream); }
+  .process-steps {
+    margin-top: 2.5rem;
+    display: flex; flex-direction: column; gap: 0;
+  }
+  .process-step {
+    display: flex; gap: 1.2rem;
+    position: relative;
+    padding-bottom: 2rem;
+  }
+  .process-step:last-child { padding-bottom: 0; }
+  .process-step:last-child .step-line { display: none; }
+
+  .step-left {
+    display: flex; flex-direction: column; align-items: center;
+    flex-shrink: 0; width: 48px;
+  }
+  .step-num {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem; font-weight: 600;
+    color: var(--deep);
+    flex-shrink: 0;
+    box-shadow: 0 4px 20px rgba(201,168,76,0.35);
+  }
+  .step-line {
+    flex: 1; width: 1px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+    margin-top: 0.5rem; min-height: 40px;
+    opacity: 0.3;
+  }
+  .step-content { padding-top: 0.6rem; }
+  .step-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem; font-weight: 600; color: var(--text);
+    margin-bottom: 0.3rem;
+  }
+  .step-desc { font-size: 0.75rem; color: var(--muted); line-height: 1.7; }
+
+  /* ── TESTIMONIALS ── */
+  #testimonials {
+    background: linear-gradient(160deg, var(--deep) 0%, var(--deep2) 100%);
+    overflow: hidden;
+  }
+  #testimonials .section-title { color: var(--white); }
+  #testimonials .section-eyebrow { color: var(--gold-light); }
+
+  .testi-slider {
+    margin-top: 2.5rem;
+    position: relative; overflow: hidden;
+  }
+  .testi-track {
+    display: flex;
+    transition: transform 0.5s cubic-bezier(0.16,1,0.3,1);
+  }
+  .testi-card {
+    flex: 0 0 100%;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 20px;
+    padding: 2rem 1.5rem;
+    position: relative;
+  }
+  .testi-quote {
+    font-size: 3rem; line-height: 1;
+    color: var(--gold); opacity: 0.3;
+    font-family: 'Cormorant Garamond', serif;
+    position: absolute; top: 1rem; left: 1.5rem;
+  }
+  .testi-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem; font-style: italic;
+    color: rgba(255,255,255,0.85); line-height: 1.7;
+    margin-top: 1.5rem;
+  }
+  .testi-author { display: flex; align-items: center; gap: 0.8rem; margin-top: 1.5rem; }
+  .testi-avatar {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Montserrat', sans-serif; font-weight: 700;
+    color: var(--deep); font-size: 1rem;
+  }
+  .testi-name {
+    font-size: 0.82rem; font-weight: 600; color: var(--white);
+  }
+  .testi-event {
+    font-size: 0.65rem; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--gold); margin-top: 0.1rem;
+  }
+  .testi-stars { color: var(--gold); font-size: 0.75rem; margin-top: 0.3rem; }
+
+  .testi-controls { display: flex; justify-content: center; gap: 0.4rem; margin-top: 1.5rem; }
+
+  /* ── PRICING ── */
+  #pricing { background: var(--cream); }
+  .pricing-grid { display: grid; gap: 1.2rem; margin-top: 2.5rem; }
+  .price-card {
+    background: var(--white);
+    border: 1px solid rgba(201,168,76,0.15);
+    border-radius: 22px;
+    padding: 2rem 1.5rem;
+    position: relative; overflow: hidden;
+    transition: transform 0.35s, box-shadow 0.35s;
+  }
+  .price-card:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(201,168,76,0.15); }
+  .price-card.featured {
+    background: linear-gradient(160deg, var(--deep) 0%, var(--deep2) 100%);
+    border-color: var(--gold);
+    box-shadow: 0 10px 40px rgba(201,168,76,0.25);
+  }
+  .featured-badge {
+    position: absolute; top: 1rem; right: 1rem;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    color: var(--deep); font-size: 0.58rem;
+    font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 0.25rem 0.7rem; border-radius: 50px;
+  }
+  .price-tier {
+    font-size: 0.62rem; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 0.5rem;
+  }
+  .price-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem; font-weight: 600;
+    color: var(--text);
+  }
+  .price-card.featured .price-name { color: var(--white); }
+  .price-amount {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.5rem; font-weight: 300;
+    color: var(--deep2); margin: 0.8rem 0;
+  }
+  .price-card.featured .price-amount { color: var(--gold); }
+  .price-amount span { font-size: 1rem; font-weight: 400; }
+  .price-features { list-style: none; margin: 1rem 0 1.5rem; }
+  .price-features li {
+    font-size: 0.76rem; color: var(--muted);
+    padding: 0.4rem 0; display: flex; align-items: center; gap: 0.6rem;
+    border-bottom: 1px solid rgba(0,0,0,0.04);
+  }
+  .price-card.featured .price-features li { color: rgba(255,255,255,0.65); border-color: rgba(255,255,255,0.06); }
+  .price-features li i { color: var(--gold); font-size: 0.7rem; flex-shrink: 0; }
+
+  /* ── CTA BANNER ── */
+  #cta-banner {
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+    text-align: center;
+    padding: 4rem 1.5rem;
+    position: relative; overflow: hidden;
+  }
+  #cta-banner::before {
+    content: '';
+    position: absolute; top: -40%; left: -20%;
+    width: 200%; height: 200%;
+    background: radial-gradient(ellipse, rgba(255,255,255,0.2) 0%, transparent 60%);
+    animation: shimmer 4s ease infinite;
+  }
+  @keyframes shimmer {
+    0%,100% { transform: translateX(-10%); }
+    50% { transform: translateX(10%); }
+  }
+  .cta-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 8vw, 3rem);
+    font-weight: 600;
+    color: var(--deep);
+    position: relative; line-height: 1.2;
+  }
+  .cta-sub {
+    font-size: 0.82rem; color: rgba(26,14,46,0.7);
+    margin: 0.8rem auto 2rem; max-width: 320px; line-height: 1.7;
+    position: relative;
+  }
+  .cta-btns { display: flex; flex-direction: column; gap: 0.8rem; align-items: center; position: relative; }
+  .btn-dark {
+    background: var(--deep);
+    color: var(--gold);
+    border: none; border-radius: 50px;
+    padding: 1rem 2.5rem;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.82rem; font-weight: 600;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    cursor: pointer; text-decoration: none;
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    transition: transform 0.25s, box-shadow 0.25s;
+    box-shadow: 0 6px 30px rgba(26,14,46,0.4);
+  }
+  .btn-dark:hover { transform: translateY(-3px); box-shadow: 0 10px 40px rgba(26,14,46,0.5); }
+
+  /* ── CONTACT ── */
+  #contact { background: var(--deep); color: var(--white); }
+  #contact .section-title { color: var(--white); }
+  .contact-grid { display: grid; gap: 2rem; margin-top: 2.5rem; }
+  .contact-info { display: flex; flex-direction: column; gap: 1rem; }
+  .contact-item {
+    display: flex; align-items: flex-start; gap: 1rem;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(201,168,76,0.15);
+    border-radius: 14px; padding: 1rem 1.2rem;
+    transition: border-color 0.3s, background 0.3s;
+  }
+  .contact-item:hover { border-color: rgba(201,168,76,0.4); background: rgba(201,168,76,0.05); }
+  .contact-icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    display: flex; align-items: center; justify-content: center;
+    color: var(--deep); font-size: 1rem; flex-shrink: 0;
+  }
+  .contact-label { font-size: 0.62rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.2rem; }
+  .contact-val { font-size: 0.82rem; color: rgba(255,255,255,0.8); }
+
+  .contact-form { display: flex; flex-direction: column; gap: 0.8rem; }
+  .form-group { position: relative; }
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    width: 100%;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 12px;
+    padding: 0.9rem 1rem;
+    color: var(--white);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.78rem;
+    outline: none;
+    transition: border-color 0.3s, background 0.3s;
+  }
+  .form-group input::placeholder,
+  .form-group textarea::placeholder {
+    color: rgba(255,255,255,0.3);
+  }
+  .form-group select { color: rgba(255,255,255,0.7); }
+  .form-group select option { background: var(--deep); color: var(--white); }
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus {
+    border-color: var(--gold);
+    background: rgba(201,168,76,0.06);
+  }
+  .form-group textarea { height: 100px; resize: none; }
+  .form-submit {
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    color: var(--deep);
+    border: none; border-radius: 12px;
+    padding: 1rem;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.82rem; font-weight: 600;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    cursor: pointer; width: 100%;
+    display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+    transition: transform 0.25s, box-shadow 0.25s;
+  }
+  .form-submit:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(201,168,76,0.5); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #0F0820;
+    padding: 2.5rem 1.5rem;
+    text-align: center;
+    border-top: 1px solid rgba(201,168,76,0.15);
+  }
+  .footer-logo {
+    font-family: 'Great Vibes', cursive;
+    font-size: 2rem; color: var(--gold);
+    display: block; margin-bottom: 0.8rem;
+    text-shadow: 0 0 20px rgba(201,168,76,0.4);
+  }
+  .footer-tagline {
+    font-size: 0.65rem; letter-spacing: 0.2em;
+    text-transform: uppercase; color: rgba(255,255,255,0.35);
+    margin-bottom: 1.5rem;
+  }
+  .footer-socials { display: flex; justify-content: center; gap: 0.8rem; margin-bottom: 1.5rem; }
+  .social-btn {
+    width: 38px; height: 38px;
+    border-radius: 50%; border: 1px solid rgba(201,168,76,0.3);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gold); font-size: 0.85rem; text-decoration: none;
+    transition: all 0.3s;
+  }
+  .social-btn:hover { background: var(--gold); color: var(--deep); border-color: var(--gold); transform: translateY(-3px); }
+  .footer-copy { font-size: 0.65rem; color: rgba(255,255,255,0.25); }
+
+  /* ── WHATSAPP FLOAT ── */
+  .wa-float {
+    position: fixed; bottom: 1.5rem; right: 1.5rem;
+    width: 56px; height: 56px; border-radius: 50%;
+    background: #25D366;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 1.5rem;
+    text-decoration: none; z-index: 800;
+    box-shadow: 0 6px 25px rgba(37,211,102,0.5);
+    animation: waPulse 2.5s ease infinite;
+    transition: transform 0.25s;
+  }
+  .wa-float:hover { transform: scale(1.1); }
+  @keyframes waPulse {
+    0%,100% { box-shadow: 0 6px 25px rgba(37,211,102,0.5); }
+    50% { box-shadow: 0 6px 40px rgba(37,211,102,0.7), 0 0 0 8px rgba(37,211,102,0.1); }
+  }
+
+  /* ── POPUP ── */
+  .popup-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(10px);
+    z-index: 2000;
+    display: flex; align-items: center; justify-content: center;
+    padding: 1.5rem;
+    opacity: 0; visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+  }
+  .popup-overlay.show { opacity: 1; visibility: visible; }
+  .popup-card {
+    background: var(--deep);
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 24px;
+    padding: 2rem 1.5rem;
+    max-width: 380px; width: 100%;
+    position: relative;
+    transform: scale(0.85) translateY(20px);
+    transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+  }
+  .popup-overlay.show .popup-card { transform: scale(1) translateY(0); }
+  .popup-close {
+    position: absolute; top: 1rem; right: 1rem;
+    width: 32px; height: 32px; border-radius: 50%;
+    background: rgba(255,255,255,0.08); border: none;
+    color: var(--white); cursor: pointer; font-size: 0.9rem;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s;
+  }
+  .popup-close:hover { background: rgba(255,255,255,0.15); }
+  .popup-icon { font-size: 2.5rem; text-align: center; margin-bottom: 1rem; }
+  .popup-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem; font-weight: 600;
+    color: var(--white); text-align: center; margin-bottom: 0.5rem;
+  }
+  .popup-sub { font-size: 0.75rem; color: rgba(255,255,255,0.55); text-align: center; line-height: 1.7; margin-bottom: 1.5rem; }
+
+  /* Glitter particles */
+  .glitter { position: fixed; pointer-events: none; z-index: 9000; }
+  .glitter-particle {
+    position: absolute;
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--gold);
+    opacity: 0;
+    animation: glitterFly 1s ease forwards;
+  }
+  @keyframes glitterFly {
+    0% { opacity: 1; transform: translate(0,0) scale(1); }
+    100% { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(0); }
+  }
+
+  /* ── RESPONSIVE DESKTOP MEDIA QUERIES ── */
+
+  /* Tablet / Small Desktop */
+  @media (min-width: 768px) {
+    .services-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+    .pricing-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+    .price-card:last-child {
+      grid-column: span 2;
+      max-width: 50%;
+      margin: 0 auto;
+    }
+    .cta-btns {
+      flex-direction: row;
+      justify-content: center;
+      gap: 1.5rem;
+    }
+    .cta-sub {
+      max-width: 500px;
+    }
+  }
+
+  /* Medium Desktop */
+  @media (min-width: 992px) {
+    section {
+      padding: 7rem 5rem;
+    }
+    #gallery {
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+    }
+    .about-grid {
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 4rem;
+    }
+    .about-img-wrap {
+      aspect-ratio: 1/1;
+    }
+    .pricing-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+    .price-card:last-child {
+      grid-column: auto;
+      max-width: none;
+      margin: 0;
+    }
+    .process-steps {
+      flex-direction: row;
+      gap: 2.5rem;
+    }
+    .process-step {
+      flex: 1;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding-bottom: 0;
+    }
+    .step-left {
+      flex-direction: row;
+      align-items: center;
+      width: 100%;
+      justify-content: center;
+      position: relative;
+    }
+    .step-line {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(to right, var(--gold), transparent);
+      margin-top: 0;
+      margin-left: 1rem;
+      min-height: auto;
+      position: absolute;
+      left: 50%;
+      top: 24px;
+      z-index: 1;
+    }
+    .step-num {
+      position: relative;
+      z-index: 2;
+    }
+    .process-step:last-child .step-line {
+      display: none;
+    }
+    .contact-grid {
+      grid-template-columns: 1fr 1.2fr;
+      gap: 4rem;
+      align-items: flex-start;
+    }
+  }
+
+  /* Large Desktop */
+  @media (min-width: 1200px) {
+    section {
+      padding: 8rem 10%;
+    }
+    #gallery {
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+    }
+    nav {
+      padding: 1.5rem 10%;
+    }
+    nav.scrolled {
+      padding: 1rem 10%;
+    }
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      align-items: center;
+    }
+    .nav-links a {
+      color: rgba(255, 255, 255, 0.85);
+      text-decoration: none;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      transition: color 0.3s, transform 0.3s;
+    }
+    .nav-links a:hover {
+      color: var(--gold);
+      transform: translateY(-1px);
+    }
+    .hero-sub {
+      max-width: 600px;
+      font-size: 1rem;
+    }
+    .services-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2.5rem;
+    }
+    .cf-card {
+      width: 280px;
+      height: 370px;
+      margin-top: -185px;
+      margin-left: -140px;
+    }
+    .cf-stage {
+      height: 440px;
+    }
+    .testi-slider {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- PRELOADER -->
+<div id="preloader">
+  <div class="floating-petals" id="preloaderPetals"></div>
+  <div class="preloader-script">Luvvent Events</div>
+  <div class="preloader-sub">Crafting Dreams Into Reality</div>
+  <div class="preloader-line"></div>
+</div>
+
+<!-- GLITTER CONTAINER -->
+<div class="glitter" id="glitter"></div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">Luvvent</a>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#services">Services</a>
+    <a href="#gallery">Portfolio</a>
+    <a href="#process">Process</a>
+    <a href="#testimonials">Reviews</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <a href="tel:9090219319" class="nav-cta">
+    <i class="fas fa-phone"></i> Book Now
+  </a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="floating-petals" id="heroPetals"></div>
+
+  <div class="hero-eyebrow" style="position:relative;">
+    <span>Hyderabad's Premier Event Studio</span>
+  </div>
+
+  <h1 class="hero-title">
+    Every Moment<br/>
+    <span>Perfectly Planned</span>
+  </h1>
+
+  <p class="hero-sub">Weddings · Receptions · Corporate Events · Birthdays · Haldi Ceremonies</p>
+
+  <div class="hero-btns">
+    <a href="#contact" class="btn-primary">
+      <i class="fas fa-calendar-heart"></i> Plan My Event
+    </a>
+    <a href="#gallery" class="btn-outline">
+      <i class="fas fa-images"></i> View Gallery
+    </a>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-num" data-count="500">0</div>
+      <div class="stat-label">Events Done</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" data-count="8">0</div>
+      <div class="stat-label">Years Active</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" data-count="100">0</div>
+      <div class="stat-label">% Satisfaction</div>
+    </div>
+  </div>
+
+  <div class="scroll-indicator">
+    <div class="scroll-dot"></div>
+    <div class="scroll-dot"></div>
+    <div class="scroll-dot"></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-img-wrap reveal">
+      <div class="about-img-placeholder">Luvvent</div>
+      <div class="about-badge">
+        <span>8+</span>
+        <span>Years of Excellence</span>
+      </div>
+    </div>
+    <div class="about-text">
+      <div class="section-eyebrow reveal">Our Story</div>
+      <h2 class="section-title reveal delay-1">
+        Where Love Meets <em>Artistry</em>
+      </h2>
+      <p class="section-desc reveal delay-2">
+        Luvvent Events has been Hyderabad's most trusted name in luxury event management for over 8 years. From intimate haldi ceremonies to grand royal receptions, we transform every vision into an unforgettable experience.
+      </p>
+      <div class="about-features reveal delay-3">
+        <div class="about-feat"><i class="fas fa-ring"></i> Royal Weddings</div>
+        <div class="about-feat"><i class="fas fa-building"></i> Corporate Events</div>
+        <div class="about-feat"><i class="fas fa-cake-candles"></i> Birthdays</div>
+        <div class="about-feat"><i class="fas fa-star-and-crescent"></i> Haldi & Mehendi</div>
+        <div class="about-feat"><i class="fas fa-camera"></i> Photo & Video</div>
+        <div class="about-feat"><i class="fas fa-utensils"></i> Catering Coord.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="section-eyebrow reveal">What We Do</div>
+  <h2 class="section-title reveal delay-1">Our <em>Signature</em> Services</h2>
+  <p class="section-desc reveal delay-2">Every service is crafted with obsessive attention to detail, because your special day deserves nothing less than perfection.</p>
+
+  <div class="services-grid">
+    <div class="service-card reveal delay-1">
+      <div class="service-icon"><i class="fas fa-heart"></i></div>
+      <div class="service-name">Wedding Planning</div>
+      <div class="service-desc">Full-service wedding management from décor to catering — we orchestrate every detail so you can be fully present in your moment.</div>
+      <div class="service-arrow"><i class="fas fa-arrow-right"></i></div>
+    </div>
+    <div class="service-card reveal delay-2">
+      <div class="service-icon"><i class="fas fa-champagne-glasses"></i></div>
+      <div class="service-name">Reception Design</div>
+      <div class="service-desc">Breathtaking reception setups with custom floral arrangements, lighting, and stage décor that tell your love story beautifully.</div>
+      <div class="service-arrow"><i class="fas fa-arrow-right"></i></div>
+    </div>
+    <div class="service-card reveal delay-3">
+      <div class="service-icon"><i class="fas fa-briefcase"></i></div>
+      <div class="service-name">Corporate Events</div>
+      <div class="service-desc">Professional, polished, and impactful corporate events — conferences, product launches, and gala dinners managed flawlessly.</div>
+      <div class="service-arrow"><i class="fas fa-arrow-right"></i></div>
+    </div>
+    <div class="service-card reveal delay-4">
+      <div class="service-icon"><i class="fas fa-cake-candles"></i></div>
+      <div class="service-name">Birthday Celebrations</div>
+      <div class="service-desc">From intimate gatherings to grand birthday bashes — themed décor, entertainment, and memories that last a lifetime.</div>
+      <div class="service-arrow"><i class="fas fa-arrow-right"></i></div>
+    </div>
+    <div class="service-card reveal delay-5">
+      <div class="service-icon"><i class="fas fa-spa"></i></div>
+      <div class="service-name">Haldi & Mehendi</div>
+      <div class="service-desc">Traditional ceremonies elevated with premium floral setups, instagrammable backdrops, and vibrant cultural decor.</div>
+      <div class="service-arrow"><i class="fas fa-arrow-right"></i></div>
+    </div>
+    <div class="service-card reveal delay-6">
+      <div class="service-icon"><i class="fas fa-flowers"></i></div>
+      <div class="service-name">Floral Artistry</div>
+      <div class="service-desc">Our signature garlands and floral installations are a Luvvent hallmark — fresh, fragrant, and exquisitely arranged.</div>
+      <div class="service-arrow"><i class="fas fa-arrow-right"></i></div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY COVERFLOW -->
+<section id="gallery">
+  <div class="section-eyebrow reveal">Portfolio</div>
+  <h2 class="section-title reveal delay-1">Our <em>Work</em> Speaks</h2>
+  <p class="section-desc reveal delay-2">Every setup crafted with love, every moment captured in beauty.</p>
+
+  <div class="cf-stage reveal delay-3" id="cfStage">
+    <div class="cf-track" id="cfTrack"></div>
+  </div>
+
+  <div class="cf-meta" id="cfMeta"></div>
+
+  <div class="cf-nav">
+    <button class="cf-btn" id="cfPrev"><i class="fas fa-chevron-left"></i></button>
+    <div class="cf-dots" id="cfDots"></div>
+    <button class="cf-btn" id="cfNext"><i class="fas fa-chevron-right"></i></button>
+  </div>
+  <div class="cf-hint">Swipe or click cards to explore</div>
+</section>
+
+<!-- PROCESS -->
+<section id="process">
+  <div class="section-eyebrow reveal">How It Works</div>
+  <h2 class="section-title reveal delay-1">Your Event, <em>Our Obsession</em></h2>
+  <p class="section-desc reveal delay-2">A seamless journey from your first call to the last dance.</p>
+
+  <div class="process-steps">
+    <div class="process-step reveal delay-1">
+      <div class="step-left">
+        <div class="step-num">1</div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step-content">
+        <div class="step-title">Discovery Call</div>
+        <div class="step-desc">We listen to your vision, understand your preferences, and craft a custom event blueprint just for you.</div>
+      </div>
+    </div>
+    <div class="process-step reveal delay-2">
+      <div class="step-left">
+        <div class="step-num">2</div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step-content">
+        <div class="step-title">Concept Design</div>
+        <div class="step-desc">Our creative team designs mood boards, theme concepts, and 3D décor layouts for your approval.</div>
+      </div>
+    </div>
+    <div class="process-step reveal delay-3">
+      <div class="step-left">
+        <div class="step-num">3</div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step-content">
+        <div class="step-title">Vendor Coordination</div>
+        <div class="step-desc">We handle all vendors — florals, catering, photography, entertainment — so you don't have to.</div>
+      </div>
+    </div>
+    <div class="process-step reveal delay-4">
+      <div class="step-left">
+        <div class="step-num">4</div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step-content">
+        <div class="step-title">Your Perfect Day</div>
+        <div class="step-desc">We set up, manage, and execute flawlessly — you simply arrive, enjoy, and create memories.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div class="section-eyebrow reveal">Love Notes</div>
+  <h2 class="section-title reveal delay-1">What Families <em>Say</em></h2>
+
+  <div class="testi-slider reveal delay-2">
+    <div class="testi-track" id="testiTrack">
+
+      <div class="testi-card">
+        <div class="testi-quote">"</div>
+        <div class="testi-text">Luvvent Events made our wedding day absolutely magical. Every detail was beyond what we could have dreamed of. The floral arrangements were breathtaking!</div>
+        <div class="testi-author">
+          <div class="testi-avatar">P</div>
+          <div>
+            <div class="testi-name">Priya & Rajan Sharma</div>
+            <div class="testi-event">Wedding Reception · 2024</div>
+            <div class="testi-stars">★★★★★</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testi-card">
+        <div class="testi-quote">"</div>
+        <div class="testi-text">Our corporate gala was handled with exceptional professionalism. Every guest was impressed by the venue setup and seamless coordination by the Luvvent team.</div>
+        <div class="testi-author">
+          <div class="testi-avatar">A</div>
+          <div>
+            <div class="testi-name">Arjun Mehta</div>
+            <div class="testi-event">Corporate Gala · TechCorp Hyderabad</div>
+            <div class="testi-stars">★★★★★</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testi-card">
+        <div class="testi-quote">"</div>
+        <div class="testi-text">From haldi to reception, everything was perfect. The team was attentive, creative, and went above and beyond at every step. Truly the best in Hyderabad!</div>
+        <div class="testi-author">
+          <div class="testi-avatar">S</div>
+          <div>
+            <div class="testi-name">Sunita Reddy</div>
+            <div class="testi-event">Full Wedding Package · 2025</div>
+            <div class="testi-stars">★★★★★</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="testi-controls" id="testiDots"></div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="section-eyebrow reveal">Investment</div>
+  <h2 class="section-title reveal delay-1">Simple, <em>Transparent</em> Pricing</h2>
+  <p class="section-desc reveal delay-2">Choose the package that fits your dream. Every package includes our signature Luvvent touch.</p>
+
+  <div class="pricing-grid">
+    <div class="price-card reveal delay-1">
+      <div class="price-tier">Starter</div>
+      <div class="price-name">Silver Bloom</div>
+      <div class="price-amount">₹<span>25,000</span>+</div>
+      <ul class="price-features">
+        <li><i class="fas fa-check-circle"></i> Basic Stage Décor</li>
+        <li><i class="fas fa-check-circle"></i> Floral Arrangements</li>
+        <li><i class="fas fa-check-circle"></i> Event Coordination (4 hrs)</li>
+        <li><i class="fas fa-check-circle"></i> Setup & Breakdown</li>
+        <li><i class="fas fa-check-circle"></i> WhatsApp Support</li>
+      </ul>
+      <a href="#contact" class="btn-outline" style="width:100%;justify-content:center;">Get Started <i class="fas fa-arrow-right"></i></a>
+    </div>
+
+    <div class="price-card featured reveal delay-2">
+      <div class="featured-badge">Most Popular</div>
+      <div class="price-tier">Premium</div>
+      <div class="price-name">Golden Affair</div>
+      <div class="price-amount">₹<span>75,000</span>+</div>
+      <ul class="price-features">
+        <li><i class="fas fa-check-circle"></i> Full Venue Transformation</li>
+        <li><i class="fas fa-check-circle"></i> Premium Floral & Lighting</li>
+        <li><i class="fas fa-check-circle"></i> Photography Coordination</li>
+        <li><i class="fas fa-check-circle"></i> Catering Management</li>
+        <li><i class="fas fa-check-circle"></i> Entertainment Booking</li>
+        <li><i class="fas fa-check-circle"></i> Dedicated Event Manager</li>
+      </ul>
+      <a href="#contact" class="btn-primary" style="width:100%;justify-content:center;">Book This Package <i class="fas fa-arrow-right"></i></a>
+    </div>
+
+    <div class="price-card reveal delay-3">
+      <div class="price-tier">Luxury</div>
+      <div class="price-name">Royal Dream</div>
+      <div class="price-amount">₹<span>1.5L</span>+</div>
+      <ul class="price-features">
+        <li><i class="fas fa-check-circle"></i> All-Inclusive Package</li>
+        <li><i class="fas fa-check-circle"></i> 3D Theme Design</li>
+        <li><i class="fas fa-check-circle"></i> Premium Catering (per plate)</li>
+        <li><i class="fas fa-check-circle"></i> Video + Photography Full Day</li>
+        <li><i class="fas fa-check-circle"></i> Live Entertainment</li>
+        <li><i class="fas fa-check-circle"></i> Valet & Guest Management</li>
+      </ul>
+      <a href="#contact" class="btn-outline" style="width:100%;justify-content:center;">Enquire Now <i class="fas fa-arrow-right"></i></a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BANNER -->
+<section id="cta-banner">
+  <h2 class="cta-title reveal">Ready to Create<br/>Your <em style="font-style:italic">Dream</em> Event?</h2>
+  <p class="cta-sub reveal delay-1">Let's make it unforgettable. Reach out today and let Luvvent Events bring your vision to life.</p>
+  <div class="cta-btns reveal delay-2">
+    <a href="tel:9090219319" class="btn-dark">
+      <i class="fas fa-phone"></i> Call Us Now
+    </a>
+    <a href="https://wa.me/919090219319" class="btn-dark" target="_blank">
+      <i class="fab fa-whatsapp"></i> WhatsApp Us
+    </a>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-eyebrow reveal">Get In Touch</div>
+  <h2 class="section-title reveal delay-1">Start Your <em>Journey</em></h2>
+  <div class="contact-grid">
+    <div class="contact-info reveal delay-2">
+      <div class="contact-item">
+        <div class="contact-icon"><i class="fas fa-phone"></i></div>
+        <div>
+          <div class="contact-label">Phone / WhatsApp</div>
+          <div class="contact-val">+91 9090219319</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon"><i class="fas fa-location-dot"></i></div>
+        <div>
+          <div class="contact-label">Location</div>
+          <div class="contact-val">Hyderabad, Telangana, India</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon"><i class="fab fa-instagram"></i></div>
+        <div>
+          <div class="contact-label">Instagram</div>
+          <div class="contact-val">@luvvent_events</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon"><i class="fas fa-globe"></i></div>
+        <div>
+          <div class="contact-label">Website</div>
+          <div class="contact-val">luvventevents.com</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="contact-form reveal delay-3">
+      <div class="form-group">
+        <input type="text" placeholder="Your Name *" required/>
+      </div>
+      <div class="form-group">
+        <input type="tel" placeholder="Phone Number *" required/>
+      </div>
+      <div class="form-group">
+        <select>
+          <option value="" disabled selected>Type of Event</option>
+          <option>Wedding</option>
+          <option>Reception</option>
+          <option>Birthday</option>
+          <option>Haldi / Mehendi</option>
+          <option>Corporate Event</option>
+          <option>Naming Ceremony</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <input type="date" placeholder="Event Date"/>
+      </div>
+      <div class="form-group">
+        <textarea placeholder="Tell us about your dream event..."></textarea>
+      </div>
+      <button class="form-submit" onclick="handleSubmit(event)">
+        <i class="fas fa-paper-plane"></i> Send Enquiry
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-logo">Luvvent Events</span>
+  <div class="footer-tagline">Crafting Dreams Into Reality · Hyderabad</div>
+  <div class="footer-socials">
+    <a href="#" class="social-btn"><i class="fab fa-instagram"></i></a>
+    <a href="#" class="social-btn"><i class="fab fa-facebook"></i></a>
+    <a href="#" class="social-btn"><i class="fab fa-youtube"></i></a>
+    <a href="https://wa.me/919090219319" class="social-btn"><i class="fab fa-whatsapp"></i></a>
+  </div>
+  <div class="footer-copy">© 2025 Luvvent Events. All Rights Reserved. · Weddings · Corporate · Birthdays</div>
+</footer>
+
+<!-- WHATSAPP FLOAT -->
+<a href="https://wa.me/919090219319" class="wa-float" target="_blank">
+  <i class="fab fa-whatsapp"></i>
+</a>
+
+<!-- SUCCESS POPUP -->
+<div class="popup-overlay" id="popup">
+  <div class="popup-card">
+    <button class="popup-close" onclick="closePopup()"><i class="fas fa-times"></i></button>
+    <div class="popup-icon">✨</div>
+    <div class="popup-title">We'll Be In Touch!</div>
+    <div class="popup-sub">Thank you for reaching out to Luvvent Events. Our team will contact you within 24 hours to discuss your dream event.</div>
+    <a href="https://wa.me/919090219319" class="btn-primary" style="width:100%;justify-content:center;" target="_blank">
+      <i class="fab fa-whatsapp"></i> Chat on WhatsApp
+    </a>
+  </div>
+</div>
+
+<script>
+// ── PRELOADER ──
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('preloader').classList.add('hidden');
+    startCounters();
+    createPetals('heroPetals', 20);
+  }, 2800);
+});
+
+// ── PETALS ──
+function createPetals(containerId, count) {
+  const container = document.getElementById(containerId);
+  const colors = ['#C9A84C','#E8C97A','#F5E6C0','#F2D4D7','#FFFFFF'];
+  for (let i = 0; i < count; i++) {
+    const p = document.createElement('div');
+    p.className = 'petal';
+    p.style.cssText = `
+      left: ${Math.random()*100}%;
+      background: ${colors[Math.floor(Math.random()*colors.length)]};
+      width: ${4+Math.random()*8}px;
+      height: ${8+Math.random()*12}px;
+      animation-duration: ${5+Math.random()*10}s;
+      animation-delay: ${Math.random()*8}s;
+    `;
+    container.appendChild(p);
+  }
+}
+createPetals('preloaderPetals', 15);
+
+// ── NAV SCROLL ──
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 60);
+});
+
+// ── SCROLL REVEAL ──
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      revealObserver.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.reveal, .reveal-left, .reveal-scale').forEach(el => {
+  revealObserver.observe(el);
+});
+
+// ── COUNTER ANIMATION ──
+function startCounters() {
+  document.querySelectorAll('[data-count]').forEach(el => {
+    const target = +el.dataset.count;
+    let current = 0;
+    const step = Math.ceil(target / 60);
+    const timer = setInterval(() => {
+      current = Math.min(current + step, target);
+      el.textContent = current + (target === 100 ? '' : '+');
+      if (current >= target) clearInterval(timer);
+    }, 25);
+  });
+}
+
+// ── 3D COVERFLOW GALLERY ──
+const CF_EVENTS = [
+  { title:"Royal Reception Night",   tag:"Wedding Reception", badge:"Premium",  desc:"Grand ballroom with 5000+ roses and golden drape installations",          img:"https://images.unsplash.com/photo-1519741497674-611481863552?w=400&q=80" },
+  { title:"Haldi Ceremony Bliss",    tag:"Haldi · Mehendi",  badge:"Floral",   desc:"Vibrant marigold mandap with handcrafted garlands and turmeric décor",    img:"https://images.unsplash.com/photo-1583939411023-14783179e581?w=400&q=80" },
+  { title:"Corporate Gala Dinner",   tag:"Corporate Event",  badge:"Elite",    desc:"800-guest gala at The Park Hyderabad with bespoke lighting & stage design",img:"https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=400&q=80" },
+  { title:"Grand Wedding Mandap",    tag:"Wedding Ceremony", badge:"Grand",    desc:"Traditional South Indian mandap with gold pillars & fresh jasmine garlands",img:"https://images.unsplash.com/photo-1606800052052-a08af7148866?w=400&q=80" },
+  { title:"Birthday Extravaganza",   tag:"Birthday · Kids",  badge:"Fun",      desc:"Fantasy themed birthday bash with balloon art, candy stations & live acts", img:"https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=400&q=80" },
+  { title:"Engagement Soirée",       tag:"Engagement",       badge:"Romantic", desc:"Intimate rooftop engagement with fairy lights & a live string quartet",     img:"https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=400&q=80" },
+  { title:"Naming Ceremony Setup",   tag:"Naming Ceremony",  badge:"Gentle",   desc:"Pastel floral naming ceremony with handmade cradle décor & fragrant blooms",img:"https://images.unsplash.com/photo-1578269174936-2709b6aeb913?w=400&q=80" }
+];
+
+let cfCurrent = 0;
+let cfAnimating = false;
+const cfTrack = document.getElementById('cfTrack');
+const cfDotsEl = document.getElementById('cfDots');
+const cfMetaEl = document.getElementById('cfMeta');
+
+(function buildCF() {
+  cfTrack.innerHTML = '';
+  CF_EVENTS.forEach((ev, i) => {
+    const card = document.createElement('div');
+    card.className = 'cf-card';
+    card.innerHTML = `
+      <img class="cf-card-img" src="${ev.img}" alt="${ev.title}" loading="lazy"/>
+      <div class="cf-card-overlay"></div>
+      <div class="cf-card-shine"></div>
+      <div class="cf-card-badge">${ev.badge}</div>
+      <div class="cf-card-body">
+        <div class="cf-card-tag">${ev.tag}</div>
+        <div class="cf-card-title">${ev.title}</div>
+      </div>`;
+    card.addEventListener('click', () => { if (i !== cfCurrent) cfGoTo(i); });
+    cfTrack.appendChild(card);
+  });
+  cfDotsEl.innerHTML = '';
+  CF_EVENTS.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'cf-dot' + (i === 0 ? ' active' : '');
+    d.addEventListener('click', () => cfGoTo(i));
+    cfDotsEl.appendChild(d);
+  });
+  cfUpdatePositions(false);
+  cfUpdateMeta(false);
+})();
+
+function cfGetTransform(offset) {
+  const abs = Math.abs(offset), sign = offset > 0 ? 1 : -1;
+  const isDesktop = window.innerWidth >= 1024;
+  const tx1 = isDesktop ? 260 : 172;
+  const tx2 = isDesktop ? 460 : 305;
+  const tx3 = isDesktop ? 600 : 405;
+
+  if (abs === 0) return { tx:0, tz:0, ry:0, scale:1, opacity:1, z:10, shadow:'0 30px 70px rgba(0,0,0,0.7), 0 0 0 1px rgba(201,168,76,0.3)' };
+  if (abs > 3)  return { tx:sign*tx3, tz:-400, ry:sign*55, scale:0.5, opacity:0, z:0, shadow:'none' };
+  const cfg = [null,
+    { tx:sign*tx1, tz:-80,  ry:sign*22, scale:0.82, opacity:0.72, z:7, shadow:'0 10px 30px rgba(0,0,0,0.5)' },
+    { tx:sign*tx2, tz:-200, ry:sign*40, scale:0.65, opacity:0.42, z:4, shadow:'0 6px 18px rgba(0,0,0,0.35)' },
+    { tx:sign*tx3, tz:-320, ry:sign*55, scale:0.52, opacity:0.16, z:1, shadow:'none' }
+  ];
+  return cfg[abs];
+}
+
+function cfUpdatePositions(animate) {
+  const cards = cfTrack.querySelectorAll('.cf-card');
+  const n = CF_EVENTS.length;
+  cards.forEach((card, i) => {
+    let off = i - cfCurrent;
+    if (off > n/2) off -= n;
+    if (off < -n/2) off += n;
+    const t = cfGetTransform(off);
+    card.style.transition = animate ? 'transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94),box-shadow 0.6s ease,opacity 0.55s ease,border-color 0.4s' : 'none';
+    card.style.transform = `translateX(${t.tx}px) translateZ(${t.tz}px) rotateY(${t.ry}deg) scale(${t.scale})`;
+    card.style.opacity = t.opacity;
+    card.style.zIndex = t.z;
+    card.style.boxShadow = t.shadow;
+    card.classList.toggle('active', off === 0);
+    card.style.cursor = off === 0 ? 'default' : 'pointer';
+  });
+  cfDotsEl.querySelectorAll('.cf-dot').forEach((d, i) => d.classList.toggle('active', i === cfCurrent));
+}
+
+function cfUpdateMeta(animate) {
+  const ev = CF_EVENTS[cfCurrent];
+  if (animate) cfMetaEl.style.opacity = 0;
+  setTimeout(() => {
+    cfMetaEl.innerHTML = `
+      <div class="cf-meta-title">${ev.title}</div>
+      <div class="cf-meta-tag">${ev.tag}</div>
+      <div class="cf-meta-divider"></div>
+      <div class="cf-meta-desc">${ev.desc}</div>`;
+    cfMetaEl.style.transition = 'opacity 0.4s';
+    cfMetaEl.style.opacity = 1;
+  }, animate ? 180 : 0);
+}
+
+function cfGoTo(index) {
+  if (cfAnimating) return;
+  cfAnimating = true;
+  cfCurrent = (index + CF_EVENTS.length) % CF_EVENTS.length;
+  cfUpdatePositions(true);
+  cfUpdateMeta(true);
+  setTimeout(() => cfAnimating = false, 620);
+}
+
+document.getElementById('cfPrev').addEventListener('click', () => cfGoTo(cfCurrent - 1));
+document.getElementById('cfNext').addEventListener('click', () => cfGoTo(cfCurrent + 1));
+
+let cfTouchX = 0;
+const cfStageEl = document.getElementById('cfStage');
+cfStageEl.addEventListener('touchstart', e => { cfTouchX = e.touches[0].clientX; }, {passive:true});
+cfStageEl.addEventListener('touchend', e => {
+  const diff = cfTouchX - e.changedTouches[0].clientX;
+  if (Math.abs(diff) > 35) cfGoTo(diff > 0 ? cfCurrent+1 : cfCurrent-1);
+}, {passive:true});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowLeft') cfGoTo(cfCurrent - 1);
+  if (e.key === 'ArrowRight') cfGoTo(cfCurrent + 1);
+});
+
+let cfAuto = setInterval(() => cfGoTo(cfCurrent + 1), 4000);
+cfStageEl.addEventListener('touchstart', () => clearInterval(cfAuto), {passive:true});
+document.getElementById('cfPrev').addEventListener('click', () => clearInterval(cfAuto));
+document.getElementById('cfNext').addEventListener('click', () => clearInterval(cfAuto));
+
+window.addEventListener('resize', () => {
+  cfUpdatePositions(false);
+});
+
+// ── TESTIMONIAL SLIDER ──
+const testiTrack = document.getElementById('testiTrack');
+const testiCards = testiTrack.querySelectorAll('.testi-card');
+const testiDotsEl = document.getElementById('testiDots');
+let testiIndex = 0;
+
+testiCards.forEach((_, i) => {
+  const dot = document.createElement('div');
+  dot.className = 'gallery-dot' + (i === 0 ? ' active' : '');
+  dot.onclick = () => goToTesti(i);
+  testiDotsEl.appendChild(dot);
+});
+
+function goToTesti(index) {
+  testiIndex = index;
+  testiTrack.style.transform = `translateX(-${testiIndex * 100}%)`;
+  testiDotsEl.querySelectorAll('.gallery-dot').forEach((d, i) => {
+    d.classList.toggle('active', i === testiIndex);
+  });
+}
+
+setInterval(() => goToTesti((testiIndex + 1) % testiCards.length), 5000);
+
+let tTouchX = 0;
+testiTrack.addEventListener('touchstart', e => tTouchX = e.touches[0].clientX, {passive:true});
+testiTrack.addEventListener('touchend', e => {
+  const diff = tTouchX - e.changedTouches[0].clientX;
+  if (Math.abs(diff) > 40) {
+    goToTesti(diff > 0 ? (testiIndex+1)%testiCards.length : (testiIndex-1+testiCards.length)%testiCards.length);
+  }
+}, {passive:true});
+
+// ── GLITTER ON TAP ──
+document.addEventListener('click', (e) => {
+  spawnGlitter(e.clientX, e.clientY);
+});
+
+function spawnGlitter(x, y) {
+  const container = document.getElementById('glitter');
+  for (let i = 0; i < 8; i++) {
+    const p = document.createElement('div');
+    p.className = 'glitter-particle';
+    const angle = (Math.PI * 2 / 8) * i;
+    const dist = 30 + Math.random() * 40;
+    p.style.cssText = `
+      left: ${x}px; top: ${y}px;
+      --tx: ${Math.cos(angle)*dist}px;
+      --ty: ${Math.sin(angle)*dist}px;
+      background: ${['#C9A84C','#E8C97A','#F5E6C0','#FFFFFF'][Math.floor(Math.random()*4)]};
+    `;
+    container.appendChild(p);
+    setTimeout(() => p.remove(), 1000);
+  }
+}
+
+// ── POPUP ──
+function handleSubmit(e) {
+  e.preventDefault();
+  document.getElementById('popup').classList.add('show');
+}
+function closePopup() {
+  document.getElementById('popup').classList.remove('show');
+}
+document.getElementById('popup').addEventListener('click', function(e) {
+  if (e.target === this) closePopup();
+});
+
+// ── SMOOTH ANCHOR SCROLL ──
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+</script>
+</body>
+</html>
